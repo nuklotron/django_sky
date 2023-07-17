@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 
 # Create your views here.
 from django.views.generic import ListView, DetailView
@@ -9,8 +9,7 @@ from main.models import Product
 class ProductListView(ListView):
     model = Product
     template_name = 'main/index.html'
-    # title = 'ДОБРО ПОЖАЛОВАТЬ!'
-    # tags = 'Мы самый лучший магазин на свете!'
+    extra_context = {'title': 'ДОБРО ПОЖАЛОВАТЬ!', 'tags': 'Мы самый лучший магазин на свете!'}
 
 
 class ProductDetailView(DetailView):
@@ -32,14 +31,3 @@ def contacts(request):
     }
 
     return render(request, 'main/contacts.html', context)
-
-
-# def product(request, pk):
-#     product_item = get_object_or_404(Product, pk=pk)
-#     context = {
-#         'object_list': product_item,
-#         'title': f'{product_item.prod_title}',
-#         'tags': f'{product_item.prod_description}',
-#     }
-#
-#     return render(request, 'main/product.html', context)
