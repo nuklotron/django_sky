@@ -1,11 +1,18 @@
 {% extends 'main/base.html' %}
+{% load static %}
 {% load my_tags %}
 {% block content %}
-<!--{% for object in product_item %}-->
 
-<div class="col-md-4 align-self-auto">
-    {% include 'main/includes/inc_product.html' with object=object %}
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <img src="{{ object.preview_image|mediapath }}" width="419" height="400" alt="image"/>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<!--{% endfor %}-->
 
 {% endblock %}
