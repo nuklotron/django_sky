@@ -8,6 +8,8 @@ def index(request):
     product_list = Product.objects.all()
     context = {
         'object_list': product_list,
+        'title': 'ДОБРО ПОЖАЛОВАТЬ!',
+        'tags': 'Мы самый лучший магазин на свете!'
     }
     return render(request, 'main/index.html', context)
 
@@ -20,4 +22,19 @@ def contacts(request):
         message = request.POST.get('message')
         print(f"{name} ({phone}) - {message}")
 
-    return render(request, 'main/contacts.html')
+    context = {
+        'title': 'Контакты',
+        'tags': 'Для связи с нами, заполните форму ниже'
+    }
+
+    return render(request, 'main/contacts.html', context)
+
+
+def product(request, pk):
+    product_item = Product.objects.get(pk=pk)
+    context = {
+        'object_list': product_item,
+        'title': f'{product_item.prod_title}',
+        'tags': f'{product_item.prod_description} - {product_item.price}'
+    }
+    return render(request, 'main/product.html', context)
