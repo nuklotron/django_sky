@@ -1,11 +1,11 @@
 {% extends 'main/base.html' %}
 {% load my_tags %}
 {% block content %}
-{% for object in object_list %}
+<!--{% for object in product_item %}-->
 
 <div class="col-md-4 align-self-auto">
-    {% include 'main/includes/inc_product.html' %}
+    {% include 'main/includes/inc_product.html' with object=object %}
 </div>
-{% endfor %}
+<!--{% endfor %}-->
 
 {% endblock %}

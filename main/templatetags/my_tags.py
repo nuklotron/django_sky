@@ -16,7 +16,7 @@ def current_time(format_string):
 @register.filter()
 def mediapath(val):
     if val:
-        return f'media/{val}'
+        return f'/media/{val}'
     return '#'
 
 

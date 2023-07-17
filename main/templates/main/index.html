@@ -4,7 +4,7 @@
 {% for object in object_list %}
 
 <div class="col-md-4 align-self-auto">
-    {% include 'main/includes/inc_product.html' %}
+    {% include 'main/includes/inc_index_products.html' with object=object %}
 </div>
 {% endfor %}
 

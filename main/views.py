@@ -32,9 +32,11 @@ def contacts(request):
 
 def product(request, pk):
     product_item = Product.objects.get(pk=pk)
+    print(product_item)
     context = {
         'object_list': product_item,
         'title': f'{product_item.prod_title}',
-        'tags': f'{product_item.prod_description} - {product_item.price}'
+        'tags': f'{product_item.prod_description} - {product_item.price} руб.'
     }
+
     return render(request, 'main/product.html', context)
