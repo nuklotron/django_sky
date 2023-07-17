@@ -1,8 +1,5 @@
 from django.shortcuts import render
-
-# Create your views here.
 from django.views.generic import ListView, DetailView
-
 from main.models import Product
 
 
@@ -16,6 +13,7 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'main/product.html'
     extra_context = {'title': 'ДОБРО ПОЖАЛОВАТЬ!', 'tags': 'Мы самый лучший магазин на свете!'}
+
 
 def contacts(request):
 
