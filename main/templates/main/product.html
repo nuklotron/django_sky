@@ -8,12 +8,14 @@
         <h3 class="mb-0">{{ object.prod_title }}</h3>
         <div class="mb-1 text-body-secondary"></div>
         <p class="card-text mb-auto">{{ object.prod_description }}</p>
-            <div class="btn-group">
+        <div class="col-2">
+            <div class="btn">
                 <a href="{% url 'main:index' %}" type="button"
-                   class="btn btn-outline-secondary btn-lg btn-block">КУПИТЬ</a>
+                   class="btn btn-outline-secondary btn-lg">КУПИТЬ</a>
             </div>
         </div>
-    <div class="col-auto d-none d-lg-block ">
+    </div>
+    <div class="col-auto d-none d-lg-block shadow-sm rounded m-2">
         <img src="{{ object.preview_image|mediapath }}" width="419" height="400"/>
     </div>
 </div>
