@@ -1,4 +1,4 @@
-# main/templatetags/my_tags.py
+# blog/templatetags/my_tags.py
 import datetime
 from django import template
 from django.utils.html import conditional_escape
