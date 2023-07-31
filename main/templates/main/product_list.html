@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% load my_tags %}
+{% block content %}
+
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a type="button" class="btn btn-success m-4" href="{% url 'main:product_create' %} ">Создать</a>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for object in object_list %}
+            <div class="col-md-4 align-self-auto">
+                {% include 'main/includes/inc_index_products.html' %}
+            </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

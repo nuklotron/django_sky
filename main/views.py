@@ -8,15 +8,45 @@ from config import settings
 from main.models import Product, Blog
 
 
+class ProductCreateView(CreateView):
+    model = Product
+    fields = ('prod_title', 'prod_description', 'preview_image', 'category', 'price')
+    success_url = reverse_lazy('main:index')
+    extra_context = {'title': 'Создать новый продукт'}
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_mat = form.save()
+            new_mat.slug = slugify(new_mat.prod_title)
+            new_mat.save()
+
+        return super().form_valid(form)
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ('prod_title', 'prod_description', 'preview_image', 'category', 'price')
+    success_url = reverse_lazy('main:index')
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_mat = form.save()
+            new_mat.slug = slugify(new_mat.prod_title)
+            new_mat.save()
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('main:product_view', args=[self.kwargs.get('pk')])
+
+
 class ProductListView(ListView):
     model = Product
-    template_name = 'main/index.html'
     extra_context = {'title': 'ДОБРО ПОЖАЛОВАТЬ!', 'tags': 'Мы самый лучший магазин на свете!'}
 
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'main/product.html'
     extra_context = {'title': 'ДОБРО ПОЖАЛОВАТЬ!', 'tags': 'Мы самый лучший магазин на свете!'}
 
     def get_object(self, queryset=None):
@@ -24,6 +54,11 @@ class ProductDetailView(DetailView):
         self.object.view_count += 1
         self.object.save()
         return self.object
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('main:index')
 
 
 class BlogCreateView(CreateView):
@@ -76,13 +111,6 @@ class BlogDetailView(DetailView):
         self.object = super().get_object(queryset)
         self.object.view_count += 1
         self.object.save()
-        if self.object.view_count == 100:
-            send_mail(
-                subject='Письмо от Django',
-                message='Ваш пост набрал 100 просмотров',
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.RECIPIENT_ADDRESS]
-            )
         return self.object
 
 
