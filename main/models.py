@@ -52,7 +52,7 @@ class Blog(models.Model):
 
 
 class Version(models.Model):
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name='продукт')
+    prod_title = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name='продукт')
     version_num = models.IntegerField(default=0, verbose_name='номер версии')
     version_title = models.CharField(max_length=150, verbose_name='название версии')
     is_active = models.BooleanField(default=False, verbose_name='признак текущей версии')

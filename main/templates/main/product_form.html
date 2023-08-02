@@ -2,47 +2,49 @@
 
 {% block content %}
     <div class="col-12">
-      <form class="row" method="post" enctype="multipart/form-data">
+        <form class="row" method="POST" enctype="multipart/form-data">
 
             <div class="col-6">
-              <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title">
-                        {% if object %}
-                            Изменение продукта
-                        {% else %}
-                            Создать продукт
-                        {% endif %}
-                    </h2><hr>
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-success">
-                      {% if object %}
-                        Сохранить
-                      {% else %}
-                        Создать
-                      {% endif %}
-                    </button>
-                    <a href="{% url 'main:index' %}" type="button" class="btn btn-secondary">Назад</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title">Версия продукта</h2><hr>
-                    {{ formset.management_form }}
-                    {% for form in formset.forms %}
-                        {{ form.as_p }}
-                        {% if not forloop.last %}
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            {% if object %}
+                                Изменение продукта
+                            {% else %}
+                                Создать продукт
+                            {% endif %}
+                        </h2>
                         <hr>
-                        {% endif %}
-                    {% endfor %}
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success">
+                            {% if object %}
+                                Сохранить
+                            {% else %}
+                                Создать
+                            {% endif %}
+                        </button>
+                        <a href="{% if object %}{% url 'main:product_view' object.pk %}{% else %}{% url 'main:index' %}{% endif %}" type="button" class="btn btn-secondary">Назад</a>
+                    </div>
                 </div>
-              </div>
             </div>
 
-      </form>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Версия продукта</h2>
+                        <hr>
+                        {{ formset.management_form }}
+                        {% for form in formset.forms %}
+                            {{ form.as_p }}
+                            {% if not forloop.last %}
+                                <hr>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </form>
     </div>
 {% endblock %}

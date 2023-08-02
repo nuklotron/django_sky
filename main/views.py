@@ -1,4 +1,5 @@
 from django.core.mail import send_mail
+from django.db import transaction
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -16,11 +17,25 @@ class ProductCreateView(CreateView):
     success_url = reverse_lazy('main:index')
     extra_context = {'title': 'Создать новый продукт'}
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        VersionFormSet = inlineformset_factory(Product, Version, form=VersionFrom, extra=1)
+        if self.request.method == 'POST':
+            context_data['formset'] = VersionFormSet(self.request.POST, instance=self.object)
+        else:
+            context_data['formset'] = VersionFormSet(instance=self.object)
+        return context_data
+
     def form_valid(self, form):
+        formset = self.get_context_data()['formset']
+        self.object = form.save()
         if form.is_valid():
             new_mat = form.save()
             new_mat.slug = slugify(new_mat.prod_title)
             new_mat.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
 
         return super().form_valid(form)
 
@@ -36,7 +51,7 @@ class ProductUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         VersionFormSet = inlineformset_factory(Product, Version, form=VersionFrom, extra=1)
-        if self.request == 'POST':
+        if self.request.method == 'POST':
             context_data['formset'] = VersionFormSet(self.request.POST, instance=self.object)
         else:
             context_data['formset'] = VersionFormSet(instance=self.object)
@@ -45,10 +60,14 @@ class ProductUpdateView(UpdateView):
     def form_valid(self, form):
         formset = self.get_context_data()['formset']
         self.object = form.save()
+        if form.is_valid():
+            new_mat = form.save()
+            new_mat.slug = slugify(new_mat.prod_title)
+            new_mat.save()
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
-            formset.slug = slugify(formset.prod_title)
+
         return super().form_valid(form)
 
 
