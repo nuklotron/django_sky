@@ -1,5 +1,4 @@
 from django.core.mail import send_mail
-from django.db import transaction
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -11,11 +10,7 @@ from main.forms import ProductForm, VersionFrom
 from main.models import Product, Blog, Version
 
 
-class ProductCreateView(CreateView):
-    model = Product
-    form_class = ProductForm
-    success_url = reverse_lazy('main:index')
-    extra_context = {'title': 'Создать новый продукт'}
+class FormsMixin:
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -40,7 +35,14 @@ class ProductCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductCreateView(FormsMixin, CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('main:index')
+    extra_context = {'title': 'Создать новый продукт'}
+
+
+class ProductUpdateView(FormsMixin, UpdateView):
     model = Product
     success_url = reverse_lazy('main:index')
     form_class = ProductForm
@@ -48,32 +50,15 @@ class ProductUpdateView(UpdateView):
     def get_success_url(self):
         return reverse('main:product_view', args=[self.kwargs.get('pk')])
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        VersionFormSet = inlineformset_factory(Product, Version, form=VersionFrom, extra=1)
-        if self.request.method == 'POST':
-            context_data['formset'] = VersionFormSet(self.request.POST, instance=self.object)
-        else:
-            context_data['formset'] = VersionFormSet(instance=self.object)
-        return context_data
-
-    def form_valid(self, form):
-        formset = self.get_context_data()['formset']
-        self.object = form.save()
-        if form.is_valid():
-            new_mat = form.save()
-            new_mat.slug = slugify(new_mat.prod_title)
-            new_mat.save()
-        if formset.is_valid():
-            formset.instance = self.object
-            formset.save()
-
-        return super().form_valid(form)
-
 
 class ProductListView(ListView):
     model = Product
     extra_context = {'title': 'ДОБРО ПОЖАЛОВАТЬ!', 'tags': 'Мы самый лучший магазин на свете!'}
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+
+        return context_data
 
 
 class ProductDetailView(DetailView):
