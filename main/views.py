@@ -6,7 +6,7 @@ from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from config import settings
-from main.forms import ProductForm, VersionForm, VersionFormSet
+from main.forms import ProductFormCreate, VersionForm, VersionFormSet
 from main.models import Product, Blog, Version
 
 
@@ -35,9 +35,9 @@ class FormsMixin:
         return super().form_valid(form)
 
 
-class ProductCreateView(FormsMixin, CreateView):
+class ProductCreateView(CreateView):
     model = Product
-    form_class = ProductForm
+    form_class = ProductFormCreate
     success_url = reverse_lazy('main:index')
     extra_context = {'title': 'Создать новый продукт'}
 
@@ -45,7 +45,7 @@ class ProductCreateView(FormsMixin, CreateView):
 class ProductUpdateView(FormsMixin, UpdateView):
     model = Product
     success_url = reverse_lazy('main:index')
-    form_class = ProductForm
+    form_class = ProductFormCreate
 
     def get_success_url(self):
         return reverse('main:product_view', args=[self.kwargs.get('pk')])

@@ -26,7 +26,7 @@ class StyleFormMixin:
                 field.widget.attrs['class'] = 'form-control'
 
 
-class ProductForm(StyleFormMixin, forms.ModelForm):
+class ProductFormCreate(StyleFormMixin, forms.ModelForm):
 
     PROHIBITED = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
