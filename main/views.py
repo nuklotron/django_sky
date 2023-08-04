@@ -6,7 +6,7 @@ from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from config import settings
-from main.forms import ProductForm, VersionFrom
+from main.forms import ProductForm, VersionForm, VersionFormSet
 from main.models import Product, Blog, Version
 
 
@@ -14,11 +14,11 @@ class FormsMixin:
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        VersionFormSet = inlineformset_factory(Product, Version, form=VersionFrom, extra=1)
+        ProductVersionFormSet = inlineformset_factory(Product, Version, form=VersionForm, formset=VersionFormSet, extra=1)
         if self.request.method == 'POST':
-            context_data['formset'] = VersionFormSet(self.request.POST, instance=self.object)
+            context_data['formset'] = ProductVersionFormSet(self.request.POST, instance=self.object)
         else:
-            context_data['formset'] = VersionFormSet(instance=self.object)
+            context_data['formset'] = ProductVersionFormSet(instance=self.object)
         return context_data
 
     def form_valid(self, form):

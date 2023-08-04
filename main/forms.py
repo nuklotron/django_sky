@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import BaseInlineFormSet, inlineformset_factory
 
 from main.models import Product, Version
 
@@ -45,8 +46,22 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
         return cleaned_data
 
 
-class VersionFrom(StyleFormMixin, forms.ModelForm):
+class VersionForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Version
         fields = '__all__'
+
+
+class VersionFormSet(BaseInlineFormSet):
+
+    def clean(self):
+        super().clean()
+        current_version_count = 0
+
+        for form in self.forms:
+            if form['is_active'].data:
+                current_version_count += 1
+        if current_version_count > 1:
+            raise forms.ValidationError('Активная версия может быть только одна!')
+
