@@ -16,7 +16,7 @@
         </div>
         <div class="card-footer">
             <p class="card-text">
-                {% if object.product_ver.exist %}
+                {% if object.product_ver.exists %}
                     {% for version in object.product_ver.all %}
                         {% if version.is_active %}
                             <small class="text-muted">Версия: {{ version.version_num }}</small><br>

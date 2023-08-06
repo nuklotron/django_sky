@@ -42,6 +42,13 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
+                        {% if formset.non_form_errors %}
+                        <div class="card-footer bg-danger">
+                            {% for error in formset.non_form_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        </div>
                     </div>
                 </div>
             {% endif %}

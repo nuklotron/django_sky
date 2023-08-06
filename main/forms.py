@@ -57,11 +57,7 @@ class VersionFormSet(BaseInlineFormSet):
 
     def clean(self):
         super().clean()
-        current_version_count = 0
-
-        for form in self.forms:
-            if form['is_active'].data:
-                current_version_count += 1
-        if current_version_count > 1:
+        active_list = [form.cleaned_data['is_active'] for form in self.forms if 'is_active' in form.cleaned_data]
+        if active_list.count(True) > 1:
             raise forms.ValidationError('Активная версия может быть только одна!')
 
