@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import BaseInlineFormSet, inlineformset_factory
+from django.forms import BaseInlineFormSet
 
 from main.models import Product, Version
 
@@ -22,6 +22,9 @@ class StyleFormMixin:
                 field.widget.attrs['class'] = 'form-control select2 select2-multiple'
             elif isinstance(field.widget, forms.widgets.Select):
                 field.widget.attrs['class'] = 'form-control select2'
+            elif isinstance(field.widget, forms.widgets.PasswordInput):
+                field.widget.attrs['class'] = 'form-control'
+
             else:
                 field.widget.attrs['class'] = 'form-control'
 

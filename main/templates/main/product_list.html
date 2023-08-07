@@ -3,7 +3,9 @@
 {% block content %}
 
     <div class="btn-group" role="group" aria-label="Basic example">
-        <a type="button" class="btn btn-success m-4" href="{% url 'main:product_create' %} ">Создать</a>
+        {% if user.is_authenticated %}
+            <a type="button" class="btn btn-success m-4" href="{% url 'main:product_create' %} ">Создать</a>
+        {% endif %}
     </div>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         {% for object in object_list %}

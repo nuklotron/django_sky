@@ -40,9 +40,9 @@
     "preview_image": "prev_image/photo_2023-07-27_16-49-43.jpg",
     "category": 1,
     "price": 123123,
-    "creation_date": "2023-08-02",
+    "creation_date": "2023-08-03",
     "last_update": "2023-07-31",
-    "view_count": 10
+    "view_count": 12
   }
 },
 {
@@ -54,9 +54,9 @@
     "preview_image": "prev_image/photo_2023-07-27_16-49-45.jpg",
     "category": 3,
     "price": 5555,
-    "creation_date": "2023-08-02",
+    "creation_date": "2023-08-05",
     "last_update": "2023-07-31",
-    "view_count": 28
+    "view_count": 31
   }
 },
 {
@@ -68,9 +68,9 @@
     "preview_image": "prev_image/siemens-a35_JAcKO24.jpg",
     "category": 3,
     "price": 12345,
-    "creation_date": "2023-08-02",
+    "creation_date": "2023-08-06",
     "last_update": "2023-07-31",
-    "view_count": 33
+    "view_count": 96
   }
 },
 {
@@ -82,9 +82,23 @@
     "preview_image": "prev_image/sony_g250_1_XqF6YJQ.jpg",
     "category": 1,
     "price": 555,
-    "creation_date": "2023-08-02",
+    "creation_date": "2023-08-04",
     "last_update": "2023-08-02",
-    "view_count": 1
+    "view_count": 6
+  }
+},
+{
+  "model": "main.product",
+  "pk": 12,
+  "fields": {
+    "prod_title": "benq",
+    "prod_description": "asdqwrssdv",
+    "preview_image": "prev_image/NVIDIA-RTX4090-2_bktGSiW.jpg",
+    "category": 2,
+    "price": 6666,
+    "creation_date": "2023-08-06",
+    "last_update": "2023-08-02",
+    "view_count": 18
   }
 },
 {
@@ -95,19 +109,49 @@
     "slug": "123123123",
     "content": "qwafcvvsdv",
     "preview_image": "content_image/default.jpg",
-    "creation_date": "2023-07-31",
+    "creation_date": "2023-08-02",
     "is_published": true,
-    "view_count": 1
+    "view_count": 2
   }
 },
 {
   "model": "main.version",
-  "pk": 3,
+  "pk": 6,
+  "fields": {
+    "prod_title": 12,
+    "version_num": 2,
+    "version_title": "second",
+    "is_active": true
+  }
+},
+{
+  "model": "main.version",
+  "pk": 8,
   "fields": {
     "prod_title": 3,
     "version_num": 1,
     "version_title": "first",
     "is_active": true
+  }
+},
+{
+  "model": "main.version",
+  "pk": 9,
+  "fields": {
+    "prod_title": 3,
+    "version_num": 2,
+    "version_title": "second",
+    "is_active": false
+  }
+},
+{
+  "model": "main.version",
+  "pk": 10,
+  "fields": {
+    "prod_title": 12,
+    "version_num": 1,
+    "version_title": "first",
+    "is_active": false
   }
 }
 ]

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'main',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -133,14 +134,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # для отправки email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # RECIPIENT_ADDRESS = 'your_mail@yandex.ru'
-# EMAIL_HOST = 'smtp.yandex.ru'
-# EMAIL_PORT = 465
-# EMAIL_USE_SSL = True
-# EMAIL_HOST_USER = 'your_mail@yandex.ru'
-# EMAIL_HOST_PASSWORD = 'your_password'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-# SERVER_EMAIL = EMAIL_HOST_USER
-# EMAIL_ADMIN = EMAIL_HOST_USER
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+
+EMAIL_HOST_USER = 'postmaster@sandboxa98fd2ec8a38453887e5a461929ce7ca.mailgun.org'
+EMAIL_HOST_PASSWORD = '51e805d602ac6027171484db0e2827f7-28e9457d-bf5341fe'
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+
+AUTH_USER_MODEL = 'users.User'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
