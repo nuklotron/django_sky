@@ -139,6 +139,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_HOST_USER = 'your_login'
+EMAIL_HOST_PASSWORD = 'your_password'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
