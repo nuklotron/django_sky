@@ -3,7 +3,7 @@
 {% block content %}
 
     <div class="btn-group" role="group" aria-label="Basic example">
-        {% if user.is_authenticated %}
+        {% if user.is_stuff %}
             <a type="button" class="btn btn-success m-4" href="{% url 'main:product_create' %} ">Создать</a>
         {% endif %}
     </div>

@@ -30,14 +30,16 @@
         <div class="container">
             <div class="row">
                 <div class="col text-left mt-2">
-                    {% if user.is_authenticated %}
                         <small class="text-body-secondary">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                              <a type="button" href="{% url 'main:product_edit' object.pk %}" class="btn btn-outline-secondary">Изменить</a>
-                              <a type="button" href="{% url 'main:product_delete' object.pk %}" class="btn btn-outline-secondary">Удалить</a>
+                            {% if user.is_staff %}
+                                <a type="button" href="{% url 'main:product_edit' object.pk %}" class="btn btn-outline-secondary">Изменить</a>
+                            {% endif %}
+                            {% if perms.main.delete_product %} {# {% if user.is_superuser %} #}
+                                <a type="button" href="{% url 'main:product_delete' object.pk %}" class="btn btn-outline-secondary">Удалить</a>
+                            {% endif %}
                             </div>
                         </small>
-                    {% endif %}
                 </div>
                 <div class="col">
                     <small class="text-body-secondary">

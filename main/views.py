@@ -1,26 +1,42 @@
-from django.core.mail import send_mail
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from config import settings
 from main.forms import ProductFormCreate, VersionForm, VersionFormSet
 from main.models import Product, Blog, Version
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductFormCreate
+    permission_required = 'main.add_product'
     success_url = reverse_lazy('main:index')
     extra_context = {'title': 'Создать новый продукт'}
 
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.author = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
+    permission_required = ('main.set_is_published', 'main.change_prod_description', 'main.change_category_id')
     success_url = reverse_lazy('main:index')
     form_class = ProductFormCreate
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+
+        if self.object.author != self.request.user:
+            raise Http404
+
+        return self.object
 
     def get_success_url(self):
         return reverse('main:product_view', args=[self.kwargs.get('pk')])
@@ -43,6 +59,7 @@ class ProductUpdateView(UpdateView):
             self.object = form.save()
             new_mat = form.save()
             new_mat.slug = slugify(new_mat.prod_title)
+            self.object.author = self.request.user
             new_mat.save()
 
             if formset.is_valid():
@@ -54,14 +71,15 @@ class ProductUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     extra_context = {'title': 'ДОБРО ПОЖАЛОВАТЬ!', 'tags': 'Мы самый лучший магазин на свете!'}
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-
-        return context_data
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        print(queryset.__dict__)
+        queryset = queryset.filter(is_published=True)
+        return queryset
 
 
 class ProductDetailView(DetailView):
@@ -75,8 +93,9 @@ class ProductDetailView(DetailView):
         return self.object
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Product
+    permission_required = 'main.delete_product'
     success_url = reverse_lazy('main:index')
 
 
@@ -164,12 +183,3 @@ def toggle_activity(request, pk):
     blog_activity.save()
 
     return redirect(reverse('main:list'))
-
-
-def send_message():
-    send_mail(
-        subject='Письмо от Django',
-        message='Ваш пост набрал 100 просмотров',
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[settings.RECIPIENT_ADDRESS]
-    )

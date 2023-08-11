@@ -1,5 +1,7 @@
 from django.db import models
 
+from config import settings
+
 # Create your models here.
 NULLABLE = {'blank': True, 'null': True}
 
@@ -25,6 +27,8 @@ class Product(models.Model):
     creation_date = models.DateField(verbose_name='дата создания', auto_now=True)
     last_update = models.DateField(verbose_name='дата последнего изменения', auto_now_add=True)
     view_count = models.IntegerField(default=0, verbose_name='просмотры')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='автор', **NULLABLE)
+    is_published = models.BooleanField(default=False, verbose_name='опубликовать')
 
     def __str__(self):
         return f'{self.prod_title} - {self.category}'
@@ -32,6 +36,11 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'продукт'
         verbose_name_plural = 'продукты'
+        permissions = [
+            ('change_prod_description', 'can change product description'),
+            ('set_is_published', 'can change status'),
+            ('change_category_id', 'can change category')
+                       ]
 
 
 class Blog(models.Model):

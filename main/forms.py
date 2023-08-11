@@ -35,7 +35,7 @@ class ProductFormCreate(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('prod_title', 'prod_description', 'preview_image', 'category', 'price',)
+        fields = ('prod_title', 'prod_description', 'preview_image', 'category', 'price', 'is_published',)
 
     def clean_prod_title(self):
         cleaned_data = self.cleaned_data.get('prod_title').lower()
@@ -63,4 +63,3 @@ class VersionFormSet(BaseInlineFormSet):
         active_list = [form.cleaned_data['is_active'] for form in self.forms if 'is_active' in form.cleaned_data]
         if active_list.count(True) > 1:
             raise forms.ValidationError('Активная версия может быть только одна!')
-

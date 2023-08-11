@@ -1,6 +1,8 @@
 import random
 
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
@@ -45,7 +47,7 @@ class RegisterView(CreateView):
         return redirect('users:email_confirmation_sent')
 
 
-class ProfileView(UpdateView):
+class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserProfileForm
     success_url = reverse_lazy('users:profile')
@@ -54,6 +56,7 @@ class ProfileView(UpdateView):
         return self.request.user
 
 
+@login_required
 def gen_new_password(request):
     new_pass = ''.join([str(random.randint(0, 9)) for _ in range(12)])
     send_mail(
