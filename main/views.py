@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -6,7 +6,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from main.forms import ProductFormCreate, VersionForm, VersionFormSet, ModeratorsForm
+from main.forms import ProductFormCreate, VersionForm, VersionFormSet
 from main.models import Product, Blog, Version
 
 
@@ -24,8 +24,9 @@ class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
+    permission_required = ('main.set_is_published', 'main.change_prod_description', 'main.change_category_id')
     success_url = reverse_lazy('main:index')
     form_class = ProductFormCreate
 
@@ -69,15 +70,6 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         return super().form_valid(form)
 
-    def test_func(self):
-        first_option = self.request.user.groups.filter(name='moderator').exists()
-        second_options = self.request.user.is_superuser
-        if first_option:
-            self.form_class = ModeratorsForm
-        if second_options:
-            self.form_class = ProductFormCreate
-        return first_option or second_options
-
 
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
@@ -85,6 +77,7 @@ class ProductListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
+        print(queryset.__dict__)
         queryset = queryset.filter(is_published=True)
         return queryset
 

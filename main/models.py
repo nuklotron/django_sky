@@ -1,5 +1,3 @@
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from config import settings
@@ -39,9 +37,9 @@ class Product(models.Model):
         verbose_name = 'продукт'
         verbose_name_plural = 'продукты'
         permissions = [
-            ('change_prod_description', 'изм.описание'),
-            ('set_is_published', 'снять с публикации'),
-            ('change_category_id', 'изм. категорию')
+            ('change_prod_description', 'can change product description'),
+            ('set_is_published', 'can change status'),
+            ('change_category_id', 'can change category')
                        ]
 
 
