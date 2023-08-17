@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.core.cache import cache
 from django.forms import inlineformset_factory
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -6,8 +8,10 @@ from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from config.settings import CACHE_ENABLED
 from main.forms import ProductFormCreate, VersionForm, VersionFormSet, ModeratorsForm
 from main.models import Product, Blog, Version
+from main.services import get_cached_details_for_product, get_category_list
 
 
 class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -32,6 +36,8 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
 
+        if self.request.user.is_superuser or self.request.user.is_staff:
+            return self.object
         if self.object.author != self.request.user:
             raise Http404
 
@@ -86,6 +92,8 @@ class ProductListView(LoginRequiredMixin, ListView):
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
         queryset = queryset.filter(is_published=True)
+        # добавил кэширование, но вроде не работает
+        get_category_list()
         return queryset
 
 
@@ -98,6 +106,11 @@ class ProductDetailView(DetailView):
         self.object.view_count += 1
         self.object.save()
         return self.object
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['details'] = get_cached_details_for_product(self.object.pk)
+        return context_data
 
 
 class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
