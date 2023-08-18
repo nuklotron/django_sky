@@ -1,5 +1,4 @@
 # Byte-compiled / optimized / DLL files
-.env
 env
 .idea
 __pycache__/
