@@ -145,9 +145,7 @@ EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_HOST_USER = os.getenv('MAILGUN_USER')
 EMAIL_HOST_PASSWORD = os.getenv('MAILGUN_PASS')
-# EMAIL_HOST = 'smtp.yandex.ru'
-# EMAIL_HOST_USER = 'l1liput69@yandex.ru'
-# EMAIL_HOST_PASSWORD = 'qoiymojplcaarzih'
+
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
